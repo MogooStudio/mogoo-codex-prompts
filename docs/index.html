@@ -1,44 +1,50 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="在 Codex 聊天侧栏收藏和查找常用提示词，点击即可追加到当前草稿。">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="在 Codex 侧栏收藏、检索和追加常用提示词。试用草稿演示，或从 Mogoo 的 GitHub 插件市场安装。">
   <title>Mogoo 常用提示词 · Codex 插件</title>
   <link rel="canonical" href="https://mogoostudio.github.io/mogoo-codex-prompts/">
-  <style>
-    :root{color-scheme:light;--ink:#202735;--muted:#4d586c;--accent:#425c99;--line:#cbd5e4}
-    *{box-sizing:border-box}
-    body{margin:0;background:#f5f7fc;color:var(--ink);font:16px/1.65 Inter,"Segoe UI","Microsoft YaHei",sans-serif}
-    header,main{width:min(1040px,calc(100% - 48px));margin:auto}
-    header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:20px 0;color:var(--muted)}
-    a{color:var(--accent);text-underline-offset:4px}
-    main{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,320px);gap:clamp(30px,6vw,80px);padding:48px 0;align-items:start}
-    h1{font-size:clamp(32px,5vw,60px);letter-spacing:-.05em;line-height:1.15;margin:.25em 0}
-    h2{font-size:22px;margin:36px 0 6px}
-    .intro{font-size:20px;max-width:28em}
-    p{color:var(--muted)}
-    pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e9eef7;border-radius:10px;padding:18px;font:14px/1.65 Consolas,monospace}
-    figure{margin:0}
-    img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid #394356;box-shadow:0 8px 32px #17283c1c}
-    @media(max-width:700px){main{grid-template-columns:1fr;padding-top:24px}figure{max-width:320px;margin:auto}header,main{width:calc(100% - 32px)}}
-  </style>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
-  <header><strong>Mogoo Studio</strong><a href="https://github.com/MogooStudio/mogoo-codex-prompts">GitHub 仓库</a></header>
-  <main>
-    <article>
-      <h1>Mogoo 常用提示词</h1>
-      <p class="intro">把常用指令收藏在 Codex 侧栏。需要时点一下，正文就会追加到当前聊天草稿，编辑后即可发送。</p>
-      <h2>安装到 Codex</h2>
-      <p>需要支持插件命令的 Codex、Git 和 Python 3.10 或更高版本。在终端运行以下两行命令。</p>
-      <pre><code>codex plugin marketplace add https://github.com/MogooStudio/mogoo-codex-prompts.git --ref main --json
-codex plugin add mogoo-codex-prompts@mogoo-codex-prompts --json</code></pre>
-      <h2>打开侧栏，收藏第一条指令</h2>
-      <p>在新聊天中输入「打开常用提示词面板」，点击「快速收藏」并粘贴正文。各项目共用这份本机收藏，可以按分类浏览，也可以搜索标题或正文。</p>
-      <p>点击面板底部的版本号可检查更新。<a href="https://github.com/MogooStudio/mogoo-codex-prompts/blob/main/CHANGELOG.zh.md">查看更新记录</a></p>
-    </article>
-    <figure><img src="panel.png" width="320" height="950" alt="深色 Codex 窄侧栏中的提示词搜索、分类和三条示例收藏"></figure>
+  <header class="nav shell">
+    <a href="#top" class="brand"><img src="icon.svg" width="32" height="32" alt="">Mogoo 常用提示词</a>
+    <nav aria-label="主导航"><a href="#install">安装</a><a href="https://github.com/MogooStudio/mogoo-codex-prompts">GitHub ↗</a></nav>
+  </header>
+  <main id="top">
+    <section class="hero shell" aria-labelledby="headline">
+      <div class="hero-text">
+        <h1 id="headline">常用的提示词，<br><em>留在手边。</em></h1>
+        <div class="lead"><p>把反复用到的指令收进 Codex 侧栏。<br>点一下，追加到当前草稿，改好再发。</p>
+          <a class="cta" href="#install">安装到 Codex <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <div class="demo" aria-labelledby="demo-title">
+        <div class="library">
+          <h2 id="demo-title">试用提示词收藏</h2>
+          <p>点一条，看看草稿如何变化。</p>
+          <div class="samples">
+            <button type="button" data-sample="review"><span><small>审查</small>只审查改动</span><span aria-hidden="true" class="append">↵</span></button>
+            <button type="button" data-sample="verify"><span><small>开发</small>附上验证结果</span><span aria-hidden="true" class="append">↵</span></button>
+            <button type="button" data-sample="discuss"><span><small>开发</small>先讨论需求</span><span aria-hidden="true" class="append">↵</span></button>
+          </div>
+        </div>
+        <div class="paper">
+          <div class="paper-head"><label for="draft">聊天草稿</label><button id="reset" type="button">重置</button></div>
+          <textarea id="draft" spellcheck="false">请看一下这次改动。</textarea>
+          <div class="paper-foot"><span class="dot"></span><span id="demo-state" role="status">网页演示 · 可编辑</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="install" class="install"><div class="shell install-grid">
+      <div><h2>装进你的 Codex。</h2><p>需要支持插件命令的 Codex、Git 和 Python 3.10+。</p></div>
+      <div class="terminal"><div><span>终端</span><button id="copy" type="button">复制命令</button></div><pre><code id="commands"><span>codex plugin marketplace add https://github.com/MogooStudio/mogoo-codex-plugin.git --ref main --json</span>
+<span>codex plugin add mogoo-codex-prompts@mogoo-codex-plugin --json</span></code></pre></div>
+      <p class="first-use">安装后，在新聊天中输入「打开常用提示词面板」。从「快速收藏」保存第一条指令，各项目共用本机收藏。</p>
+    </div></section>
   </main>
-</body>
-</html>
+  <footer class="shell"><span>Mogoo Studio</span><div><a href="https://github.com/MogooStudio/mogoo-codex-plugin">插件市场 ↗</a><a href="https://github.com/MogooStudio/mogoo-codex-prompts/blob/main/CHANGELOG.zh.md">更新记录 ↗</a></div></footer>
+</body></html>

@@ -27,7 +27,7 @@ class UpdateTests(unittest.TestCase):
                                                       "path": "./plugin", "ref": "main"}}
         self.write_catalog()
         self.registration = {"marketplaces": [{"name": self.market, "root": str(snap),
-                             "marketplaceSource": {"sourceType": "git", "source": updater.SOURCE}}]}
+                             "marketplaceSource": {"sourceType": "git", "source": updater.MARKET_SOURCE}}]}
 
     def enter_patch(self, key, value):
         obj = patch.object(updater, key, value)

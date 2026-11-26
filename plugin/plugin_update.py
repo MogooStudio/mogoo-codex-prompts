@@ -16,7 +16,8 @@ MANIFEST = json.loads((ROOT / "plugin.json").read_text(encoding="utf-8"))
 NAME = MANIFEST["name"]
 VERSION = MANIFEST["version"]
 SOURCE = MANIFEST["repository"] + ".git"
-MARKET = NAME
+MARKET = "mogoo-codex-plugin"
+MARKET_SOURCE = "https://github.com/MogooStudio/mogoo-codex-plugin.git"
 HOME = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex").resolve()
 DATA = Path(os.environ.get("MOGOO_PROMPTS_DATA") or HOME / NAME)
 STABLE = re.compile(r"(?:0|[1-9][0-9]{0,8})(?:\.(?:0|[1-9][0-9]{0,8})){2}")
@@ -84,7 +85,8 @@ def verified_market(market):
         return False
     entry = entries[0]
     origin = entry.get("marketplaceSource", {})
-    if (origin.get("sourceType") != "git" or origin.get("source") != SOURCE
+    expected = SOURCE if market == NAME else MARKET_SOURCE
+    if (origin.get("sourceType") != "git" or origin.get("source") != expected
             or Path(entry["root"]).resolve() != snapshot(market)):
         return False
     return valid_catalog(market)
@@ -201,7 +203,7 @@ def install(market, target):
 
 
 def update(action, data):
-    market = MARKET
+    market = NAME if ROOT == cache(NAME) / VERSION else MARKET
     if action in ("auto", "check"):
         check(action)
     elif action == "configure" and isinstance(data.get("enabled"), bool):

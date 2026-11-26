@@ -16,20 +16,20 @@
 
 需要 Python 3.10+、Git 和带有插件命令的 Codex CLI。插件包在本仓库的 `plugin/`，面板从本仓库的 GitHub 标签检查更新。
 
-在终端执行以下命令，再到新聊天中打开「Mogoo 常用提示词」。第一条让 Codex 读取本 GitHub 仓库里的插件目录，第二条安装常用提示词。
+在终端执行以下命令，再到新聊天中打开「Mogoo 常用提示词」。第一条在 Codex 登记 GitHub 上的 Mogoo 插件市场，第二条安装常用提示词。
 
 ```powershell
-codex plugin marketplace add https://github.com/MogooStudio/mogoo-codex-prompts.git --ref main --json
-codex plugin add mogoo-codex-prompts@mogoo-codex-prompts --json
+codex plugin marketplace add https://github.com/MogooStudio/mogoo-codex-plugin.git --ref main --json
+codex plugin add mogoo-codex-prompts@mogoo-codex-plugin --json
 ```
 
-原先用 `mogoo-prompts-local` 安装的用户也可以按上面的命令安装。用 `codex plugin list --marketplace mogoo-codex-prompts --json` 确认新版本已启用，在新聊天核对收藏后，可执行 `codex plugin remove mogoo-codex-prompts@mogoo-prompts-local --json` 移除旧安装。
+在 `codex plugin list --marketplace mogoo-codex-plugin --json` 中确认新安装已启用。先前从产品独立目录安装的用户，可在新聊天核对原收藏后，通过 `codex plugin remove mogoo-codex-prompts@mogoo-codex-prompts --json` 移除旧安装。使用同名旧市场的用户参见[目录迁移说明](https://github.com/MogooStudio/mogoo-codex-plugin#已登记同名旧目录时)。
 
 ## 更新
 
 点击面板底部的版本号可查看版本、立即检查、开关自动检查或忽略某个新版。更新器读取 GitHub 上的稳定版标签 `v主版本.次版本.修订号`，自动检查成功后六小时内复用结果。点击「立即更新」并确认后，插件通过 Codex CLI 安装。新版在新聊天或重启 Codex 后生效。
 
-更新器核对 Codex 登记的 GitHub 地址、发行标签和 `main` 指向，再由 Codex 从 GitHub 拉取 `plugin/` 安装。使用 0.1.6 或更早版本时，先运行 `codex plugin marketplace upgrade mogoo-codex-prompts --json` 刷新安装目录，再执行上面的插件安装命令。如果面板显示手动更新命令，可复制到终端执行。
+更新器核对 Codex 登记的 GitHub 地址、发行标签和 `main` 指向，再由 Codex 从 GitHub 拉取 `plugin/` 安装。如果面板显示手动更新命令，可复制到终端执行。
 
 收藏、分类、最近使用和外观保存在 Codex 用户目录下的 `mogoo-codex-prompts/prompts.sqlite3`。更新状态单独保存。测试可用 `MOGOO_PROMPTS_DATA` 指定临时数据目录。
 

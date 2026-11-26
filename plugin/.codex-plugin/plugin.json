@@ -1,6 +1,6 @@
 {
   "name": "mogoo-codex-prompts",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "在 Codex 聊天侧面板收藏、检索并追加常用提示词。",
   "author": {
     "name": "mogoo"
