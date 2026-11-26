@@ -1,8 +1,9 @@
 {
-  "name": "mogoo-prompts-local",
+  "name": "mogoo-codex-prompts",
   "interface": {
-    "displayName": "Mogoo 提示词 · 本机开发"
+    "displayName": "Mogoo 常用提示词"
   },
+  "owner": {"name": "mogoo"},
   "plugins": [
     {
       "name": "mogoo-codex-prompts",

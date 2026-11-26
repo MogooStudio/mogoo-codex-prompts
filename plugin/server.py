@@ -6,10 +6,12 @@ import sqlite3
 import sys
 from uuid import uuid4
 
+import plugin_update
+
 PANEL_TITLE = "Mogoo 常用提示词"
 URI = "ui://mogoo-codex-prompts/panel.html"
 MIME = "text/html;profile=mcp-app"
-VERSION = "0.1.4"
+VERSION = plugin_update.VERSION
 ROOT = Path(__file__).resolve().parent
 DATA = Path(os.environ.get("MOGOO_PROMPTS_DATA") or
             Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex") / "mogoo-codex-prompts")
@@ -132,6 +134,7 @@ def dispatch(method, params):
             raise ValueError("未知资源。")
         panel = (ROOT / "panel.html").read_text(encoding="utf-8").replace(
             "<!-- panel-runtime -->", "<script>" + (ROOT / "panel.js").read_text(encoding="utf-8") + "</script>")
+        panel = panel.replace("<!-- plugin-version -->", VERSION)
         return {"contents": [dict(uri=URI, mimeType=MIME, text=panel,
                                   _meta={"ui": {"csp": {"connectDomains": [], "resourceDomains": []},
                                                 "permissions": {"clipboardWrite": {}}}})]}
@@ -142,16 +145,18 @@ def dispatch(method, params):
         schema = dict(type="object", properties={"action": {"type":"string"}, "data": {"type":"object"}},
                       required=["action"], additionalProperties=False)
         return {"tools": [descriptor("prompts_panel", "打开当前聊天的常用提示词面板。", empty, entry) | {"title": PANEL_TITLE},
+                          descriptor("prompts_update", "查看版本和管理插件更新。", schema, {"ui":{"visibility":["app"]}}),
                           descriptor("prompts_collection", "读取和更新本机收藏。", schema, {"ui":{"visibility":["app"]}})]}
     if method == "tools/call":
         if params.get("name") == "prompts_panel":
             payload = result({"threadId": (params.get("_meta") or {}).get("threadId")})
             payload["_meta"] = {"ui": {"resourceUri":URI}}
             return payload
-        if params.get("name") == "prompts_collection":
+        if params.get("name") in ("prompts_collection", "prompts_update"):
             args = params.get("arguments") or {}
             try:
-                return result(collection(args["action"], args.get("data") or {}))
+                handler = plugin_update.update if params["name"] == "prompts_update" else collection
+                return result(handler(args["action"], args.get("data") or {}))
             except (ValueError, sqlite3.Error, OSError, KeyError, TypeError) as exc:
                 return {"isError":True, "content":[{"type":"text","text":str(exc)}]}
     raise LookupError(method)

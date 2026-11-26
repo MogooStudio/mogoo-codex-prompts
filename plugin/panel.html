@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-version="<!-- plugin-version -->">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,6 +44,8 @@ dialog :is(textarea,select,input){font-size:16px}.field-head{display:flex;align-
 dialog input::placeholder,dialog textarea::placeholder{color:var(--muted);opacity:1}
 #notice{font-size:13px;color:var(--sub)}footer{min-height:44px}.row-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px}.item-menu{font-size:16px;min-width:32px;line-height:24px;border-radius:4px;color:var(--sub)}.item-menu:hover{background:var(--pale)}.manage-row{display:flex;align-items:center;gap:4px;margin:6px 0}.manage-row span{flex:1;overflow-wrap:anywhere}.manage-row button,#item-options button{min-height:32px;color:var(--accent)}#item-options button{display:block;width:100%;text-align:left}button:disabled{opacity:.5;cursor:default}.inline-error{color:var(--error)}
 @media(max-width:380px){.heading{gap:6px}.heading h1{font-size:19px}.heading .mark{display:none}}
+footer{display:flex;align-items:center;gap:6px}#version-open{margin-left:auto;white-space:nowrap;color:var(--accent);font-size:12px}
+#update-dialog pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--pale);padding:8px}#update-dialog .option{display:flex;align-items:center;gap:6px}#update-auto{width:auto;margin:0}#update-dialog a{color:var(--accent)}
 </style>
 </head><body>
 <svg class="symbols" aria-hidden="true"><defs>
@@ -55,7 +57,16 @@ dialog input::placeholder,dialog textarea::placeholder{color:var(--muted);opacit
 </header>
 <div class="tools"><div class="search-row"><label class="search"><svg><use href="#search"/></svg><input id="query" type="search" placeholder="搜索标题或正文" aria-label="搜索标题或正文"><kbd>/</kbd></label><button class="history-trigger" id="recent-trigger" aria-haspopup="dialog" aria-controls="recent-dialog"><svg aria-hidden="true"><use href="#history"/></svg>最近使用</button></div><div class="filter-row"><nav class="filters" aria-label="分类"></nav><button class="add-category" id="add-category">管理分类</button></div></div>
 <main id="list" aria-label="提示词"></main>
-<footer><span id="notice" role="status">正在连接当前聊天…</span> <button id="retry" class="text-action" hidden>重新读取</button></footer></div>
+<footer><span id="notice" role="status">正在连接当前聊天…</span> <button id="retry" class="text-action" hidden>重新读取</button><button id="version-open" aria-label="插件版本与更新" aria-haspopup="dialog">v<!-- plugin-version --></button></footer></div>
+<dialog id="update-dialog" aria-labelledby="update-title">
+<div class="recent-head"><h2 id="update-title">插件更新</h2><form method="dialog"><button>关闭</button></form></div>
+<p id="update-versions"></p><p id="update-status" role="status"></p>
+<label class="option"><input id="update-auto" type="checkbox">自动检查更新</label>
+<div class="actions"><button id="update-check">立即检查</button><button id="update-dismiss" hidden>忽略此版本</button><button id="update-install" class="primary" hidden>立即更新</button></div>
+<div id="update-confirm" hidden><p id="update-question"></p><div class="actions"><button id="update-cancel">取消</button><button id="update-yes" class="primary">确认更新</button></div></div>
+<details id="update-manual" hidden><summary>手动更新命令</summary><pre id="update-commands"></pre><button id="update-copy">复制命令</button></details>
+<p><a id="update-notes" href="https://github.com/MogooStudio/mogoo-codex-prompts/blob/main/CHANGELOG.zh.md" target="_blank" rel="noopener noreferrer">查看更新记录</a></p>
+</dialog>
 <dialog id="appearance-dialog" aria-labelledby="appearance-title">
 <div class="recent-head"><h2 id="appearance-title">外观</h2><form method="dialog"><button>完成</button></form></div>
 <fieldset class="theme-options" aria-label="外观模式">

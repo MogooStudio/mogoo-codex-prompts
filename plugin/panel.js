@@ -263,13 +263,97 @@ window.addEventListener('focus',()=>{if(initialized&&!document.querySelector('di
 async function start(){
   try {
     if(!initialized){
-      const info=await request('ui/initialize',{protocolVersion:'2026-01-26',appInfo:{name:'mogoo-codex-prompts',version:'0.1.4'},appCapabilities:{}});
+      const info=await request('ui/initialize',{protocolVersion:'2026-01-26',appInfo:{name:'mogoo-codex-prompts',version:document.documentElement.dataset.version},appCapabilities:{}});
       canDraft=!!info?.hostCapabilities?.experimental?.['openai/message'];hostContext(info?.hostContext);
       initialized=true;parent.postMessage({jsonrpc:'2.0',method:'ui/notifications/initialized'},'*');
     }
     await reload();
     if(state)readyMessage();
+    void updateRequest('auto');
   }catch(e){message(e.message,true);}
 }
+let updateInfo = null, updateQueue = Promise.resolve(), confirmedTarget = null, updateTimer = null;
+function renderUpdate(info) {
+  updateInfo = info;
+  if (confirmedTarget && (!info.canInstall || confirmedTarget !== info.latest)) confirmedTarget = null;
+  const button = $('version-open');
+  button.textContent = info.installing ? '更新中…' : info.pending ? '等待生效' :
+    info.available ? '新版 v' + info.latest : 'v' + info.running;
+  const versions = ['运行中 v' + info.running, 'GitHub 最新 ' + (info.latest ? 'v' + info.latest : '待确认')];
+  if (info.installed && info.installed !== info.running) versions.push('已安装 v' + info.installed);
+  if (info.snapshot && info.snapshot !== info.running) versions.push('市场快照 v' + info.snapshot);
+  $('update-versions').textContent = versions.join(' · ');
+  $('update-status').textContent = info.installing ? '正在通过 Codex 安装…' :
+    info.pending ? '新版已安装，新开聊天或重启 Codex 后生效。' :
+    info.checking ? '正在检查 GitHub 标签…' : info.installError || info.error ||
+    (info.dismissed ? '已忽略此版本。' : info.available ?
+      (info.currentRelease ? '有新版本可用。' : '最新标签与安装分支尚未同步。') :
+      info.latest ? '当前版本已是最新。' : info.checked ? 'GitHub 暂无稳定版标签。' : '尚未检查版本。');
+  $('update-auto').checked = info.auto;
+  $('update-check').disabled = info.checking || info.installing || !!confirmedTarget;
+  $('update-dismiss').hidden = !info.available || info.installing || !!confirmedTarget;
+  $('update-install').hidden = !info.canInstall || !!confirmedTarget;
+  $('update-confirm').hidden = !confirmedTarget;
+  $('update-manual').hidden = !(info.available && info.currentRelease || info.installError) || info.installing;
+  $('update-commands').textContent = info.commands.join('\n');
+}
+function updateRequest(action, data = {}) {
+  updateQueue = updateQueue.then(() => fetchUpdate(action, data));
+  return updateQueue;
+}
+async function fetchUpdate(action, data) {
+  if (!initialized) return;
+  clearTimeout(updateTimer);
+  try {
+    const reply = await request('tools/call', {name:'prompts_update', arguments:{action, data}});
+    if (reply?.isError || !reply?.structuredContent?.running) throw Error(reply?.content?.[0]?.text || '无法读取更新状态。');
+    renderUpdate(reply.structuredContent);
+  } catch (err) {
+    $('update-status').textContent = err.message;
+  } finally {
+    if (initialized && !document.hidden && (updateInfo?.checking || updateInfo?.installing || $('update-dialog').open))
+      updateTimer = setTimeout(() => updateRequest('status'), updateInfo?.checking || updateInfo?.installing ? 1000 : 5000);
+  }
+}
+$('version-open').onclick = () => {
+  $('update-dialog').showModal();
+  void updateRequest('status');
+};
+$('update-dialog').onclose = () => { confirmedTarget = null; if (updateInfo) renderUpdate(updateInfo); };
+$('update-auto').onchange = async e => {
+  const enabled = e.target.checked;
+  await updateRequest('configure', {enabled});
+  if (enabled) void updateRequest('auto');
+};
+$('update-check').onclick = () => updateRequest('check');
+$('update-dismiss').onclick = () => updateRequest('dismiss', {target:updateInfo.latest});
+$('update-install').onclick = () => {
+  confirmedTarget = updateInfo.latest;
+  $('update-question').textContent = '确认更新到 v' + confirmedTarget + '？新版将在新聊天中生效。';
+  renderUpdate(updateInfo);
+  $('update-cancel').focus();
+};
+$('update-cancel').onclick = () => { confirmedTarget = null; renderUpdate(updateInfo); $('update-install').focus(); };
+$('update-yes').onclick = () => {
+  const target = confirmedTarget;
+  confirmedTarget = null;
+  void updateRequest('install', {target, confirmed:true});
+};
+$('update-copy').onclick = async () => {
+  try { await navigator.clipboard.writeText($('update-commands').textContent); $('update-status').textContent = '已复制更新命令。'; }
+  catch { $('update-status').textContent = '可选中命令后手动复制。'; }
+};
+$('update-notes').onclick = async e => {
+  if (parent === window) return;
+  e.preventDefault();
+  const url = e.currentTarget.href;
+  try {
+    const reply = await request('ui/open-link', {url});
+    if (reply?.isError) throw Error();
+  } catch { $('update-status').textContent = '更新记录：' + url; }
+};
+document.addEventListener('visibilitychange', () => {
+  if (initialized && !document.hidden) void updateRequest('auto');
+});
 $('retry').onclick=start;
 start();

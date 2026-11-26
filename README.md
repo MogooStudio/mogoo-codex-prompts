@@ -8,18 +8,36 @@
 - 首页显示收藏。用分类或标题、正文搜索找回其他条目。每条右下角的更多菜单支持编辑、改分类、复制和切换收藏。
 - 在「管理分类」中改名或调整顺序。「最近使用」按成功填入的时间排序。
 - 点击标题旁的外观按钮，选择跟随 Codex、浅色或深色。所有聊天共享收藏和外观。
-- 草稿在 Codex 自己的输入框内编辑。宿主只提供写入时，快速收藏可粘贴正文；未提供写入能力时，面板显示「复制」。
+- 在 Codex 输入框内编辑并发送草稿。当前聊天没有草稿写入权限时，可以复制提示词。
 
-## Windows 本地安装
+## 安装
 
-在本项目根目录执行，机器需要 Python 3.10+ 和 Codex CLI。
+需要 Python 3.10+、Git 和带有插件命令的 Codex CLI。插件包在本仓库的 `plugin/`，面板从本仓库的 GitHub 标签检查更新。
+
+在终端执行以下命令，再到新聊天中打开「Mogoo 常用提示词」。第一条让 Codex 读取本 GitHub 仓库里的插件目录，第二条安装常用提示词。
 
 ```powershell
-codex plugin marketplace add .
-codex plugin add mogoo-codex-prompts@mogoo-prompts-local
-codex plugin list --marketplace mogoo-prompts-local --json
+codex plugin marketplace add https://github.com/MogooStudio/mogoo-codex-prompts.git --ref main --json
+codex plugin add mogoo-codex-prompts@mogoo-codex-prompts --json
 ```
 
-如果安装前已打开的聊天没有插件入口，可在新聊天中打开面板。Windows 启动器和源码位于 `plugin/scripts/`。默认数据文件为 Codex 用户目录下的 `mogoo-codex-prompts/prompts.sqlite3`，与插件安装缓存分开。测试可指定 `MOGOO_PROMPTS_DATA` 指向临时目录。
+原先用 `mogoo-prompts-local` 安装的用户也可以按上面的命令安装。用 `codex plugin list --marketplace mogoo-codex-prompts --json` 确认新版本已启用，在新聊天核对收藏后，可执行 `codex plugin remove mogoo-codex-prompts@mogoo-prompts-local --json` 移除旧安装。
 
-`design/native-list.html` 是独立设计原型。安装版资源来自 `plugin/panel.html` 和 `plugin/panel.js`，由 `plugin/server.py` 通过 MCP 提供。
+## 更新
+
+点击面板底部的版本号可查看版本、立即检查、开关自动检查或忽略某个新版。更新器读取 GitHub 上的稳定版标签 `v主版本.次版本.修订号`，自动检查成功后六小时内复用结果。点击「立即更新」并确认后，插件通过 Codex CLI 安装。新版在新聊天或重启 Codex 后生效。
+
+更新器核对 Codex 登记的 GitHub 地址、发行标签和 `main` 指向，再按需刷新这个仓库的快照并安装 `plugin/`。如果面板显示手动更新命令，可复制到终端执行。
+
+收藏、分类、最近使用和外观保存在 Codex 用户目录下的 `mogoo-codex-prompts/prompts.sqlite3`。更新状态单独保存。测试可用 `MOGOO_PROMPTS_DATA` 指定临时数据目录。
+
+## 维护
+
+改动版本时同步 `plugin/plugin.json`、`plugin/.codex-plugin/plugin.json` 和更新记录。MCP 服务和面板从包内清单读取运行版本。先验证安装和测试，再让 GitHub 的 `main` 与稳定版标签指向同一提交。
+
+```powershell
+python -B -m unittest discover -s tests
+node --check plugin/panel.js
+```
+
+[更新记录](https://github.com/MogooStudio/mogoo-codex-prompts/blob/main/CHANGELOG.zh.md)
