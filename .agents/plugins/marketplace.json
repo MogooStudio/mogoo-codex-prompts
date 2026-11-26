@@ -1,0 +1,20 @@
+{
+  "name": "mogoo-prompts-local",
+  "interface": {
+    "displayName": "Mogoo 提示词 · 本机开发"
+  },
+  "plugins": [
+    {
+      "name": "mogoo-codex-prompts",
+      "source": {
+        "source": "local",
+        "path": "./plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

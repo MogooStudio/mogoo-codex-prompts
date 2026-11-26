@@ -1,0 +1,24 @@
+{
+  "name": "mogoo-codex-prompts",
+  "version": "0.1.4",
+  "description": "在当前聊天查找、收藏和填入常用提示词。",
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Mogoo 常用提示词",
+        "shortDescription": "按分类收藏提示词，点击追加到当前聊天草稿",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write",
+          "Interactive"
+        ],
+        "defaultPrompt": [
+          "打开常用提示词面板。"
+        ],
+        "brandColor": "#425C99"
+      }
+    }
+  }
+}

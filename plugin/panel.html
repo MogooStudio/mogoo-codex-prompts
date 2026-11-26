@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mogoo 常用提示词</title>
+
+<style>
+:root{
+ color-scheme:light;
+ --paper:#f8f9fc;--surface:#fff;--backdrop:#e4e7ee;--tray:#eff1f7;
+ --ink:#202531;--sub:#465065;--muted:#596579;--line:#cbd1dd;
+ --accent:#425c99;--on-accent:#fff;--hover:#344a80;--pale:#e9eef9;--selection:#d4dff5;
+ --error:#a13245;--shadow:#17213728;--scrim:#151c3048;
+ --font:Inter,"Segoe UI","Microsoft YaHei UI","Microsoft YaHei",sans-serif
+}
+:root[data-theme="dark"]{
+ color-scheme:dark;
+ --paper:#20232b;--surface:#292e39;--backdrop:#181a20;--tray:#242832;
+ --ink:#eff1f7;--sub:#c6cddc;--muted:#a4afc3;--line:#485163;
+ --accent:#acc2ff;--on-accent:#182238;--hover:#c2d2ff;--pale:#30394b;--selection:#414f6b;
+ --error:#ffadbc;--shadow:#0005;--scrim:#080a117d
+}
+*{box-sizing:border-box} html,body{margin:0;height:100%} body{background:var(--backdrop);color:var(--ink);font:14px/1.5 var(--font);line-break:strict} button,input,textarea,select{font:inherit;color:inherit} button{cursor:pointer} button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px} button{background:transparent;border:0} button:hover{color:var(--accent)} button:active{opacity:.8} [hidden]{display:none!important} svg{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round} .symbols{display:none} ::selection{background:var(--selection)}
+.panel{max-width:400px;margin:auto;height:100dvh;display:flex;flex-direction:column;background:var(--paper);box-shadow:0 0 0 1px var(--line)} header{padding:25px 20px 13px}.heading,.section-title,.search,.meta,.entry-title,.draft-title,.actions,.filters,.filter-row,.footline{display:flex;align-items:center}.heading{gap:10px}.mark{width:30px;height:34px;color:var(--accent);stroke-width:2.1}.heading h1{font-size:23px;letter-spacing:-.6px;line-height:30px;margin:0;font-weight:650}.save{margin-left:auto;display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;background:var(--accent);color:var(--on-accent);border-color:var(--accent);padding:7px 10px;font-size:13px;white-space:nowrap}.save svg{width:14px}.tools{padding:0 20px}.search{height:40px;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:0 10px;color:var(--muted)}.search:focus-within{border-color:var(--accent)}.search input{margin:0;width:100%;min-width:0;border:0;outline:none;background:transparent;font-size:16px}.search input::placeholder{color:var(--muted);font-size:13px}.search input:focus-visible{outline:none}.search kbd{font:12px/18px Consolas,monospace;color:var(--muted);width:18px;text-align:center;border:1px solid var(--line);border-radius:3px}
+.filter-row{margin-top:8px;border-bottom:1px solid var(--line);justify-content:space-between;gap:8px}.filters{gap:16px;overflow-x:auto}.tab{font-size:13px;color:var(--sub);padding:9px 0;position:relative;white-space:nowrap}.tab[aria-pressed=true]{color:var(--accent);font-weight:650}.tab[aria-pressed=true]:after{content:"";position:absolute;inset:auto 0 0;background:var(--accent);height:2px}.category-label{color:var(--muted);font-size:12px;flex:none}
+main{padding:20px 14px 10px;flex:1;min-height:0;overflow:auto;scrollbar-width:thin} section+section{margin-top:21px}.section-title{margin:0 7px 6px;gap:7px;color:var(--sub);font-size:12px;letter-spacing:.035em;font-weight:600}.section-title svg{width:14px;height:14px}.count{font:12px/1.5 var(--font);color:var(--muted);font-variant-numeric:tabular-nums}.row{width:100%;text-align:left;display:block;position:relative;border-radius:5px;padding:11px 12px 12px;line-height:1.5}.row.is-active,.row:hover,.row:focus-visible{background:var(--pale)}.row.is-active:before,.row:focus-visible:before{content:"";width:2px;background:var(--accent);position:absolute;left:0;top:12px;bottom:12px;border-radius:1px}.entry-title{gap:8px;justify-content:space-between}.name{font-size:16px;font-weight:650;line-height:23px;color:var(--ink);overflow-wrap:anywhere}.insert{display:flex;align-items:center;gap:3px;white-space:nowrap;color:var(--accent);font-size:12px}.insert svg{width:14px}.row:is(.is-active,:hover,:focus-visible) .insert{visibility:visible}.excerpt{display:block;white-space:pre-line;overflow-wrap:anywhere;color:var(--sub);margin:5px 0 0;font-size:14px;line-height:1.65}.meta{gap:7px;color:var(--muted);font-size:12px}.empty{padding:20px 8px;color:var(--sub)}
+footer{border-top:1px solid var(--line);background:var(--tray);padding:12px 21px 15px}.draft-title{gap:7px;font-size:12px;color:var(--sub);font-weight:600}.draft-title svg{width:14px}.draft-title .status{margin-left:auto;color:var(--accent);font-weight:400}.draft{width:100%;background:transparent;resize:none;display:block;border:0;line-height:22px;margin:6px 0 0;padding:2px 0;font-size:16px}
+dialog{border:1px solid var(--line);border-radius:10px;padding:20px;width:min(342px,calc(100vw - 28px));max-height:90dvh;background:var(--paper);color:var(--ink);box-shadow:0 8px 32px var(--shadow)}dialog::backdrop{background:var(--scrim)}dialog h2{margin:0 0 14px;font-size:19px}dialog label{display:block;font-size:13px;color:var(--sub);margin:12px 0}dialog :is(textarea,select,input){width:100%;margin:4px 0 0;border-radius:5px;border:1px solid var(--line);padding:7px;background:var(--surface)}dialog textarea{resize:vertical;min-height:96px}.actions{justify-content:flex-end;gap:8px}.actions button{padding:6px 12px;border-radius:5px}.primary{background:var(--accent);color:var(--on-accent)}.primary:hover{color:var(--on-accent);background:var(--hover)}@media(max-width:280px){header,.tools{padding-left:12px;padding-right:12px}.filters{gap:10px}.category-label{display:none}.insert span{display:none}h1{white-space:nowrap}.save{padding:4px}.mark{width:22px}.heading{gap:5px}}
+.add-category{flex:none;color:var(--accent);font-size:12px;padding:6px 0 6px 4px;white-space:nowrap}.category-head{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.category-head label{margin:0}.category-error{color:var(--error);font-size:13px}
+.search-row{display:flex;align-items:center;gap:8px}.search-row .search{flex:1;min-width:0}.history-trigger{display:inline-flex;align-items:center;gap:5px;padding:8px 4px;white-space:nowrap;font-size:12px;color:var(--sub)}.history-trigger svg{width:14px;height:14px}.recent-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.recent-head h2{margin:0}.recent-head button{color:var(--sub);font-size:13px}
+.save:hover{color:var(--on-accent);background:var(--hover)}.meta{font-weight:400;color:var(--muted);font-size:12px;flex:none}
+.entry-title{justify-content:flex-start;flex-wrap:wrap}.entry-title .name{flex:1;min-width:0}.item{padding:4px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.item .row{border-radius:6px}.item-actions{padding:0 12px 7px}
+.text-action{color:var(--accent);font-size:13px;min-height:28px;padding:2px 5px}.text-action:hover{text-decoration:underline}.draft-box{margin-top:7px;padding:8px 10px;border:1px solid var(--line);background:var(--surface);border-radius:6px}.draft-box:focus-within{border-color:var(--accent)}.draft-box .draft{margin:0;outline:none}.draft-box .draft:focus-visible{outline:none}.draft-title .status{font-size:12px}.heading{justify-content:space-between}.insert{background:var(--pale);border-radius:4px;padding:3px 6px}.row:hover .insert,.row:focus-visible .insert{background:var(--selection)}
+dialog :is(textarea,select,input){font-size:16px}.field-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.field-head label{margin:0}.optional{font-size:12px;font-weight:400;color:var(--muted)}.capture-error{color:var(--error);font-size:13px}.undo{padding:2px 4px;color:var(--accent);font-size:13px}.empty-actions{margin:-12px 0 12px 4px}.full-body{margin:3px 12px 10px;max-height:35vh;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.65 var(--font)}footer .draft{resize:vertical;max-height:24vh;min-height:42px}.history-trigger{min-height:36px}
+#capture-form > .actions{margin-top:14px}
+
+.appearance-trigger{display:grid;place-items:center;width:32px;height:32px;padding:0;border-radius:6px;flex:none;color:var(--sub)}
+.appearance-trigger:hover,.appearance-trigger:focus-visible{background:var(--pale);color:var(--accent)}
+.heading h1{flex:1}.heading .save{margin-left:0}
+.theme-options{border:0;margin:0;padding:0}.theme-options label{display:flex;align-items:center;gap:10px;padding:9px 8px;margin:2px 0;border-radius:5px;cursor:pointer;font-size:14px}
+.theme-options label:has(:checked){background:var(--pale);color:var(--accent)}
+.theme-options input{accent-color:var(--accent);width:16px;height:16px;margin:0}.theme-options svg{width:16px;height:16px}
+dialog input::placeholder,dialog textarea::placeholder{color:var(--muted);opacity:1}
+#notice{font-size:13px;color:var(--sub)}footer{min-height:44px}.row-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px}.item-menu{font-size:16px;min-width:32px;line-height:24px;border-radius:4px;color:var(--sub)}.item-menu:hover{background:var(--pale)}.manage-row{display:flex;align-items:center;gap:4px;margin:6px 0}.manage-row span{flex:1;overflow-wrap:anywhere}.manage-row button,#item-options button{min-height:32px;color:var(--accent)}#item-options button{display:block;width:100%;text-align:left}button:disabled{opacity:.5;cursor:default}.inline-error{color:var(--error)}
+@media(max-width:380px){.heading{gap:6px}.heading h1{font-size:19px}.heading .mark{display:none}}
+</style>
+</head><body>
+<svg class="symbols" aria-hidden="true"><defs>
+<symbol id="books" viewBox="0 0 30 34"><path d="M4 5h4v23H4zM11 5h4v23h-4zM17 7l4-1 6 21-4 1zM4 10h4m3 13h4"/></symbol>
+<symbol id="search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></symbol><symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="bookmark" viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></symbol><symbol id="history" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 7M3 5v5h5m4-3v6l3 2"/></symbol><symbol id="enter" viewBox="0 0 24 24"><path d="M20 5v7a2 2 0 0 1-2 2H5m4-4-4 4 4 4"/></symbol><symbol id="draft" viewBox="0 0 24 24"><path d="M4 5h16v12H9l-5 4zM8 9h8m-8 4h5"/></symbol>
+<symbol id="appearance" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path fill="currentColor" stroke="none" d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></symbol>
+</defs></svg>
+<div class="panel"><header><div class="heading"><svg class="mark" aria-hidden="true"><use href="#books"/></svg><h1>Mogoo 常用提示词</h1><button class="appearance-trigger" id="appearance-open" title="外观设置" aria-label="外观设置" aria-haspopup="dialog" aria-controls="appearance-dialog"><svg aria-hidden="true"><use href="#appearance"/></svg></button><button class="save" id="new"><svg><use href="#plus"/></svg>快速收藏</button></div>
+</header>
+<div class="tools"><div class="search-row"><label class="search"><svg><use href="#search"/></svg><input id="query" type="search" placeholder="搜索标题或正文" aria-label="搜索标题或正文"><kbd>/</kbd></label><button class="history-trigger" id="recent-trigger" aria-haspopup="dialog" aria-controls="recent-dialog"><svg aria-hidden="true"><use href="#history"/></svg>最近使用</button></div><div class="filter-row"><nav class="filters" aria-label="分类"></nav><button class="add-category" id="add-category">管理分类</button></div></div>
+<main id="list" aria-label="提示词"></main>
+<footer><span id="notice" role="status">正在连接当前聊天…</span> <button id="retry" class="text-action" hidden>重新读取</button></footer></div>
+<dialog id="appearance-dialog" aria-labelledby="appearance-title">
+<div class="recent-head"><h2 id="appearance-title">外观</h2><form method="dialog"><button>完成</button></form></div>
+<fieldset class="theme-options" aria-label="外观模式">
+<label><input type="radio" name="theme" value="auto">跟随 Codex</label>
+<label><input type="radio" name="theme" value="light">浅色</label>
+<label><input type="radio" name="theme" value="dark">深色</label>
+</fieldset></dialog>
+<dialog id="recent-dialog" aria-labelledby="recent-title">
+<div class="recent-head"><h2 id="recent-title">最近使用</h2><form method="dialog"><button>关闭</button></form></div>
+<div id="recent-items"></div>
+</dialog>
+<dialog id="capture" aria-labelledby="capture-title"><form id="capture-form"><h2 id="capture-title">快速收藏</h2><div class="field-head"><label for="capture-body">正文</label></div>
+<textarea id="capture-body" name="body" required placeholder="粘贴想留下的指令" autofocus></textarea><label>标题 <span class="optional">（选填）</span><input name="title" placeholder="默认取正文首行"></label><div class="category-head"><label for="capture-category">分类</label><button class="add-category" type="button" id="capture-add-category">＋ 新建分类</button></div><select name="category" id="capture-category"></select><div class="actions"><button type="button" id="cancel">关闭</button><button class="primary">收藏</button></div></form></dialog>
+<dialog id="manage" aria-labelledby="manage-title"><div class="recent-head"><h2 id="manage-title">管理分类</h2><form method="dialog"><button>完成</button></form></div><div id="category-list"></div><button class="text-action" id="manage-add">＋ 新建分类</button></dialog>
+<dialog id="item-menu" aria-labelledby="item-name"><h2 id="item-name">提示词操作</h2><div id="item-options"></div><form class="actions" method="dialog"><button>关闭</button></form></dialog>
+<dialog id="category-dialog" aria-labelledby="cat-title">
+<form id="category-form"><h2 id="cat-title">新建分类</h2>
+<label>分类名称<input id="cat-name" maxlength="40" required autofocus placeholder="例如：测试"></label>
+<p class="category-error" id="cat-error" role="alert" hidden></p>
+<div class="actions"><button type="button" id="cat-cancel">取消</button><button class="primary">创建分类</button></div>
+</form></dialog>
+<!-- panel-runtime -->
+</body></html>
