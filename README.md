@@ -1,45 +1,67 @@
-# Mogoo 常用提示词
+# mogoo-codex-prompts
 
-[插件网站](https://mogoostudio.github.io/mogoo-codex-prompts/)
+**English** | [简体中文](README.zh-CN.md)
 
-在 Codex 聊天右侧打开「Mogoo 常用提示词」，或在已加载插件的聊天中输入「打开常用提示词面板」。点击条目后，宿主将正文追加到当前草稿，由你编辑和发送。
+[Website](https://mogoostudio.github.io/mogoo-codex-prompts/)
 
-## 使用
+Keep the prompts you reuse beside your Codex chat.
 
-- 在「快速收藏」粘贴正文。标题留空时取首个非空行，分类可直接新建。
-- 首页显示收藏。用分类或标题、正文搜索找回其他条目。每条右下角的更多菜单支持编辑、改分类、复制和切换收藏。
-- 在「管理分类」中改名或调整顺序。「最近使用」按成功填入的时间排序。
-- 点击标题旁的外观按钮，选择跟随 Codex、浅色或深色。所有聊天共享收藏和外观。
-- 在 Codex 输入框内编辑并发送草稿。当前聊天没有草稿写入权限时，可以复制提示词。
+Save an instruction once and reuse it across projects. Click a saved prompt to append it to your current draft, then edit and send it from Codex.
 
-## 安装
+![Mogoo Prompts panel with search, categories, and three saved prompts](design/panel-overview.png)
 
-需要 Python 3.10+、Git 和带有插件命令的 Codex CLI。插件包在本仓库的 `plugin/`，面板从本仓库的 GitHub 标签检查更新。
+[Try the interactive demo: append a saved prompt to a draft](https://mogoostudio.github.io/mogoo-codex-prompts/#demo-title)
 
-在终端执行以下命令，再到新聊天中打开「Mogoo 常用提示词」。第一条在 Codex 登记 GitHub 上的 Mogoo 插件市场，第二条安装常用提示词。
+## Install
+
+Requires Python 3.10+, Git, and a version of Codex that supports `codex plugin`. Installation has been verified on Windows.
+
+Ask Codex to install the plugin:
+
+```text
+Install mogoo-codex-prompts from the mogoo-codex-plugin marketplace at https://github.com/MogooStudio/mogoo-codex-plugin.git.
+```
+
+Or run these commands in a terminal. The last command lists installed plugins so you can check the version and enabled status.
 
 ```powershell
 codex plugin marketplace add https://github.com/MogooStudio/mogoo-codex-plugin.git --ref main --json
 codex plugin add mogoo-codex-prompts@mogoo-codex-plugin --json
+codex plugin list --marketplace mogoo-codex-plugin --json
 ```
 
-在 `codex plugin list --marketplace mogoo-codex-plugin --json` 中确认新安装已启用。先前从产品独立目录安装的用户，可在新聊天核对原收藏后，通过 `codex plugin remove mogoo-codex-prompts@mogoo-codex-prompts --json` 移除旧安装。使用同名旧市场的用户参见[目录迁移说明](https://github.com/MogooStudio/mogoo-codex-plugin#已登记同名旧目录时)。
+If you previously installed `mogoo-codex-prompts@mogoo-codex-prompts`, open the new installation in a fresh chat and check your saved prompts. You can then remove the old installation with `codex plugin remove mogoo-codex-prompts@mogoo-codex-prompts --json`. If a marketplace with the same name points elsewhere, follow the [marketplace migration guide](https://github.com/MogooStudio/mogoo-codex-plugin#已登记同名旧目录时).
 
-## 更新
+## First use
 
-点击面板底部的版本号可查看版本、立即检查、开关自动检查或忽略某个新版。更新器读取 GitHub 上的稳定版标签 `v主版本.次版本.修订号`，自动检查成功后六小时内复用结果。点击「立即更新」并确认后，插件通过 Codex CLI 安装。新版在新聊天或重启 Codex 后生效。
+1. Open a new Codex chat and select **Mogoo 常用提示词** in the sidebar, or type `打开常用提示词面板`. The panel uses Chinese labels.
+2. Choose **快速收藏** (Quick save), paste a prompt, and save it. Leave the title blank to use the first nonempty line.
+3. Click the saved prompt. Its text appears after anything already in the current draft. Edit it and send when ready. If the chat does not support inserting drafts, the panel offers **复制** (Copy).
 
-更新器核对 Codex 登记的 GitHub 地址、发行标签和 `main` 指向，再由 Codex 从 GitHub 拉取 `plugin/` 安装。如果面板显示手动更新命令，可复制到终端执行。
+## Features
 
-收藏、分类、最近使用和外观保存在 Codex 用户目录下的 `mogoo-codex-prompts/prompts.sqlite3`。更新状态单独保存。测试可用 `MOGOO_PROMPTS_DATA` 指定临时数据目录。
+- Search titles and text, browse favorites by category, or reopen a prompt from **最近使用** (Recently used).
+- Use a prompt’s **•••** menu to edit it, change its category, duplicate it, or toggle its favorite status.
+- Create categories while saving. Rename or reorder them in **管理分类** (Manage categories).
+- Follow the Codex theme or choose light or dark mode. All chats share the collection and appearance setting.
 
-## 维护
+## Updates and local data
 
-改动版本时同步 `plugin/plugin.json`、`plugin/.codex-plugin/plugin.json` 和更新记录。MCP 服务和面板从包内清单读取运行版本。先验证安装和测试，再让 GitHub 的 `main` 与稳定版标签指向同一提交。
+Click the version number in the panel footer to check now, toggle automatic checks, or dismiss a release. The updater reads stable `vMAJOR.MINOR.PATCH` tags from this GitHub repository and reuses a successful check for six hours. When you confirm an update, it verifies the marketplace, release tag, and `main` branch before asking Codex to install the package. Open a new chat or restart Codex to load the new version. The panel also provides terminal commands for manual updates. See the [changelog (Chinese)](CHANGELOG.zh.md).
+
+Prompts, categories, recent activity, and appearance are stored in `mogoo-codex-prompts/prompts.sqlite3` under the Codex user directory. Update state is stored separately. The collection stays on this machine when you switch projects or upgrade the plugin.
+
+## Development
+
+The installable package is in [plugin/](plugin/). To run the Python tests and check the panel JavaScript, run these commands from the repository root with Python and Node.js installed:
 
 ```powershell
 python -B -m unittest discover -s tests
 node --check plugin/panel.js
 ```
 
-[更新记录](https://github.com/MogooStudio/mogoo-codex-prompts/blob/main/CHANGELOG.zh.md)
+Set `MOGOO_PROMPTS_DATA` to a temporary directory when testing with a separate collection. For a release, update both plugin manifests and the changelog, then point the stable version tag and `main` at the same commit. The MCP service and panel read their running version from the package manifest.
+
+## Feedback
+
+For a bug report, include the plugin version shown in the footer, your Codex version, and the steps that reproduce the issue. Use sample text if the problem involves a private prompt. [Open an issue](https://github.com/MogooStudio/mogoo-codex-prompts/issues).
