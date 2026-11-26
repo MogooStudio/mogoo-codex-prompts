@@ -1,19 +1,19 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "mogoo-codex-prompts",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "在 Codex 聊天侧面板收藏、检索并追加常用提示词。",
   "author": {
     "name": "mogoo"
   },
-  "homepage": "https://github.com/MogooStudio/mogoo-codex-prompts",
+  "homepage": "https://mogoostudio.github.io/mogoo-codex-prompts/",
   "repository": "https://github.com/MogooStudio/mogoo-codex-prompts",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Mogoo 常用提示词",
         "developerName": "mogoo",
-        "websiteURL": "https://github.com/MogooStudio/mogoo-codex-prompts",
+        "websiteURL": "https://mogoostudio.github.io/mogoo-codex-prompts/",
         "shortDescription": "收藏常用提示词，点击追加到当前聊天草稿",
         "longDescription": "所有聊天共用本机提示词库。按分类、标题或正文查找收藏，点击条目即可追加到当前聊天草稿，编辑后自行发送。支持最近使用、复制及深浅色外观。需要 Python 3.10 或更高版本。",
         "category": "Productivity",

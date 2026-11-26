@@ -23,7 +23,8 @@ class UpdateTests(unittest.TestCase):
         snap = updater.snapshot(self.market)
         self.catalog = snap / ".agents/plugins/marketplace.json"
         self.catalog.parent.mkdir(parents=True)
-        self.entry = {"name": updater.NAME, "source": {"source": "local", "path": "./plugin"}}
+        self.entry = {"name": updater.NAME, "source": {"source": "git-subdir", "url": updater.SOURCE,
+                                                      "path": "./plugin", "ref": "main"}}
         self.write_catalog()
         self.registration = {"marketplaces": [{"name": self.market, "root": str(snap),
                              "marketplaceSource": {"sourceType": "git", "source": updater.SOURCE}}]}
@@ -69,11 +70,6 @@ class UpdateTests(unittest.TestCase):
             calls.append(args)
             if args == ("marketplace", "list"):
                 return self.registration
-            if args == ("marketplace", "upgrade", self.market):
-                path = updater.snapshot(self.market) / "plugin/plugin.json"
-                path.parent.mkdir(parents=True)
-                path.write_text(json.dumps(dict(version=target)), encoding="utf-8")
-                return {}
             self.assertEqual(args, ("add", f"{updater.NAME}@{self.market}"))
             self.package(target)
             raise OSError("CLI exited after installation")
@@ -95,6 +91,15 @@ class UpdateTests(unittest.TestCase):
         self.entry["source"]["path"] = "./other"
         self.write_catalog()
         self.assertFalse(updater.update("status", {})["canInstall"])
+
+    def test_wrong_git_source_or_ref_blocks_install(self):
+        for overrides in ({"url": "https://example.org/other.git"}, {"ref": "dev"}, {"source": "local"}):
+            with self.subTest(overrides=overrides):
+                original = self.entry["source"]
+                self.entry["source"] = original | overrides
+                self.write_catalog()
+                self.assertFalse(updater.valid_catalog(self.market))
+                self.entry["source"] = original
 
     def test_auto_check_and_dismiss(self):
         with patch.object(updater, "releases", return_value=("9.1.0", True)) as remote:

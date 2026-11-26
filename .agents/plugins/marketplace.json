@@ -1,14 +1,18 @@
 {
   "name": "mogoo-codex-prompts",
   "interface": {
-    "displayName": "Mogoo 常用提示词"
+    "displayName": "Mogoo Codex Prompts"
   },
-  "owner": {"name": "mogoo"},
+  "owner": {
+    "name": "mogoo"
+  },
   "plugins": [
     {
       "name": "mogoo-codex-prompts",
       "source": {
-        "source": "local",
+        "source": "git-subdir",
+        "url": "https://github.com/MogooStudio/mogoo-codex-prompts.git",
+        "ref": "main",
         "path": "./plugin"
       },
       "policy": {

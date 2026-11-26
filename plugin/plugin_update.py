@@ -96,7 +96,8 @@ def valid_catalog(market):
     if catalog.get("name") != market or len(sources) != 1:
         return False
     source = sources[0]
-    return source.get("source") == "local" and source.get("path") == "./plugin"
+    return (source.get("source") == "git-subdir" and source.get("url") == SOURCE
+            and source.get("ref") == "main" and source.get("path") in ("plugin", "./plugin"))
 
 
 def state(change=None):
@@ -121,10 +122,10 @@ def status(info, market):
     newer = version_key(latest) > max(version_key(VERSION), version_key(installed))
     available = newer and info.get("dismissed") != latest and not pending
     installing = info.get("installUntil", 0) > now
-    snapshot_version = load_json(snapshot(market) / "plugin/plugin.json").get("version")
-    commands = [f"codex plugin marketplace upgrade {market} --json"]
-    commands.append(f"codex plugin add {NAME}@{market} --json")
-    return dict(running=VERSION, installed=installed, snapshot=snapshot_version, latest=latest,
+    commands = [f"codex plugin add {NAME}@{market} --json"]
+    if not valid_catalog(market):
+        commands.insert(0, f"codex plugin marketplace upgrade {market} --json")
+    return dict(running=VERSION, installed=installed, snapshot=None, latest=latest,
                 pending=pending, available=available, dismissed=newer and not available and not pending,
                 checking=info.get("checkUntil", 0) > now, installing=installing,
                 checked=bool(info.get("checkedAt")), error=info.get("checkError"),
@@ -187,12 +188,6 @@ def install(market, target):
     def apply():
         if not verified_market(market) or releases() != (target, True):
             raise UpdateError("市场来源或 GitHub 发行版本已变化，请核对后重试。")
-        if load_json(snapshot(market) / "plugin/plugin.json").get("version") != target:
-            codex("marketplace", "upgrade", market)
-        if load_json(snapshot(market) / "plugin/plugin.json").get("version") != target:
-            raise UpdateError("GitHub 安装目录与已确认版本不一致。")
-        if not verified_market(market):
-            raise UpdateError("当前市场与登记来源不一致。")
         if version_key(installed_version(market)) < version_key(target):
             try:
                 codex("add", f"{NAME}@{market}")
